@@ -538,14 +538,40 @@ The aim of the experiment is to survey area using multi-agents.We use heterogene
 
 The experiment is as follows, the total area is divided into multiple cells where each cell is considered as a subtask.we have given reward for each subtask based on the importance of location or cell.If the location is more important to be surveyed by a particular agent then we assigned more reward for that particular agent,for example a subtask with an uneven surface cannot be covered by a turtlebot hence we assign less reward for turtlebots and more reward to uavs for same subtask\cite{flushing2014mathematical}.
 
-The total area to be surveyed by the agent is divided into 30 cells which are represented via 0 to 29 nodes in the traversability graphs.The dummy vertex used is node number 30.The dummy vertex helps to recognize the starting and ending points of the selected traversability path.
+The total area to be surveyed by the agent is divided into 30 cells which are represented via 0 to 29 nodes in the directed traversability graphs.Each task \( \epsilon \) [0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,18 ,19 ,20 ,21 ,22 ,23 ,24 ,25 ,26 ,27 ,28 ,29].
+The dummy vertex as mentioned in the formulation helps to recognize the starting and ending points of the selected traversability path. The dummy vertex used is node number 30.
+The directed traversability graphs for each agent is same for both centralized and decentralized approach.In Centralized approach the algorithm we solve the algorithm for all agents jointly and assign the best possible sub tasks for each agent.In the decentralized approach we run the replica of algorithm for each agent while considering the information received from other agents.
 
-The traversability graphs for each agent is same for both centralized and decentralized approach.In Centralized approach the algorithm we solve the algorithm for all agents jointly and assign the best possible sub tasks for each agent.In the decentralized approach we run the replica of algorithm for each agent while considering the information received from other agents.
+
+In Figure (\ref{Cen_agents}) and (\ref{Decen_agents}) the directed traversability graph of each agent is given. Each agent's directed traversability graph is the set of all possible tasks it can perform in a sequence. For example the traversability graph of agent1 has edges [(0, 1),(1, 7),(6,12),(12,13),(7, 13),(13, 19),(19, 20),(20, 21),(21,15),(15,14),(14,8),(8,2),(2,1)]. In the above represented edges for task 13 can be performed only after completion of task 7 or 12. Hence task 13 is allocated to agent1 either after task 7 or when task 12 is completed by any of the agents.
+
 For evaluating the experiment on robots we are using Gazebo simulator and ros.We have created thread for each agent to make  them perform tasks simultaneously in the gazebo environment.The linear program tool kit we used for solving the MIP is PULP which is an open source python library. 
+
+we have used networkx python library for creating the directed traversability graphs for each agent.
 \section{Results}
 
-Figure (\ref{Cen_agents}) show the traversability graphs and selected paths for all agents using centralized approach when T = 5 mission intervals. Similarly figure (\ref{Decen_agents}) show the traversability graphs and selected paths for all agents using decentralized approach and when look ahead planning T = 5 mission intervals.In the above mentioned figures the traversability graph shown is with out the extension of dummy node. The selcted paths show the dummy node (In our case we have represented it with number 30), the dummy node as mentioned in the MIP model describes the starting and the ending points of the agents selected paths. Figure (\ref{simulator}) shows the agents completing assigned tasks simulatenously in the world of gazebo simulator.Figure (\ref{Cen_results}) show the results abtained for Centralized approach.Figure (\ref{De_results}) show the results abtained for Decentralized approach.The results show that to complete the same number of tasks Decentralized approach performs slightly slower compared to centralized approach with same number of mission intervals provided information exchange between agents.
-The link for the source code is \url{https://github.com/niddipi/MILP_to_Collaborative_Missions_with_Heterogeneous_Teams_using_Pulp}
+ Figure (\ref{simulator}) shows the heterogeneous team of robots consiting of two turtlebots and two iris quadcopter completing assigned tasks simulatenously in the world of gazebo simulator.
+Figure (\ref{Cen_agents}) show the directed traversability graphs and the selected one of the best possible sequence of tasks when \(\tau\) = 5 mission intervals. In the selected traversability path of each agent the node 30 is the vertex which is used to identify the starting and ending tasks in selected path. In figure (\ref{Cen_agents}) the selected sequence of tasks is 30-->6-->12-->13-->19-->20-->30. For \(\tau\) = 5 mission intervals, the optimal solution assigned 5 tasksto each agent allocating one mission interval for each task.
+
+Similarly figure (\ref{Decen_agents}) show the traversability graphs and selected paths for all agents using decentralized approach and when look ahead planning T = 5 mission intervals. Even though the directed traversability graphs assigned to each agent is same in both centralized and decentralized algorithms, the assigned task sequences by the optimal solutions are different for some agents.
+
+For example the optimal sequence of tasks assigned by the centralized approach to agent4 is 30-->17-->23-->29-->28-->22-->30 which can be seen in (\ref{simulator}). While the optimal sequence of tasks assigned by the decentralized approach to agent4 is 30-->28-->22-->21-->27-->26-->30 which can be seen in (\ref{Decen_agents}).
+
+ Figure (\ref{Cen_results}) show the results abtained for Centralized approach i;e total percaentage of area that when different mission intervals are allocated for each agent and time taken to complete the all the tasks assigned to agents in minutes.
+
+Similarly figure (\ref{De_results}) show the results abtained for Decentralized approach. 
+
+Even though the optimal sequence of tasks is different for few agents in both  centralized and decentralized approaches. The total percentage of area covered in both cetralized and decentralized approaches when given same mission intervals is almost similiar. 
+
+The results show that to complete the same number of tasks Decentralized approach performs slightly slower compared to centralized approach with same number of mission intervals provided information exchange between agents.
+
+
+\section{Conclusion}
+The specific objective of this study is to find the adaptability of the proven mathematical approach on actual robots. Our experimental results we got by testing the mathematical approach on heterogeneous team of simulated robots confirms that the both centralized and decentralized approaches works and multi-robots can complete a colloborative mission. 
+This research will serve as a base for future studies to investigate the results of centralized and decentralized approaches when tested on real robots.
+ 
+For further reference : \url{https://github.com/niddipi/MILP_to_Collaborative_Missions_with_Heterogeneous_Teams_using_Pulp}.
+
 \begin{figure}
 \hfill\begin{minipage}{0.5\textwidth}\centering
 \includegraphics[width=1\textwidth,height=0.25\textheight]{/home/neelesh/Independent_study/images/figure_1.png}
